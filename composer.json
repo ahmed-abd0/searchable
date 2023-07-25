@@ -1,5 +1,5 @@
 {
-    "name": "abdo/searchable",
+    "name": "ahmedabdo/searchable",
     "description": "package for adding search functionality to laravel models",
     "type": "library",
     "license": "MIT",
