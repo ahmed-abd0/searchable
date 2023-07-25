@@ -14,7 +14,7 @@
             "email": "amabdo00001@gmail.com"
         }
     ],
-
+    "minimum-stability": "stable",
     "require": {},
     "extra": {
         "laravel": {
