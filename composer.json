@@ -1,0 +1,26 @@
+{
+    "name": "abdo/searchable",
+    "description": "package for adding search functionality to laravel models",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Abdo\\Searchable\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ahmed123567",
+            "email": "amabdo00001@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Abdo\\Searchable\\ServiceProvider"
+            ]
+        }
+    }
+}
