@@ -6,7 +6,10 @@
     "autoload": {
         "psr-4": {
             "Abdo\\Searchable\\": "src/"
-        }
+        },
+        "files": [
+            "src/helpers/helpers.php"
+        ]
     },
     "authors": [
         {

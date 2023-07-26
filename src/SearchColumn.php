@@ -20,6 +20,7 @@ class SearchColumn
         $this->configuration = new SearchColumnOptions($configuration);
     }
 
+
     public function getColumnQuery(): callable
     {
 
@@ -107,7 +108,7 @@ class SearchColumn
         return method_exists($this->model, "search" . $this->strName()->remove("."));
     }
 
-
+  
     protected function relationSearchCustomMethod(): Closure
     {
 

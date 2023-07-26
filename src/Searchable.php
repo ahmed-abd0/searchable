@@ -7,48 +7,52 @@ use Illuminate\Database\Eloquent\Builder;
 trait Searchable
 {
 
+    protected static $automaticSearch = true;
+    protected static $automaticFilter = true;
+    protected static $useSearchableGloabalScopes = true;
+
     protected static function booted(): void
     {
-        static::addGlobalScope('search', function (Builder $builder) {
-
-            if (request()->has("search") && request()->get("search")) {
-                $builder->search(request()->get("search"));
-            }
-        });
-
-        static::addGlobalScope('filter', function (Builder $builder) {
-
-            $filters = [];
-            $builder->getModel()->filterColumns()->each(function ($column) use (&$filters) {
-
-                
-                $queryParam = str_replace(".", ":", $column);
-
-                if (request()->has($queryParam)) {
-                
-                    $filters[$column] = is_array($param = request()->get($queryParam))
-                        ? $param["operator"] . "|" . collect($param)->forget("operator")->implode(",")
-                        : htmlspecialchars_decode($param);
-
+        if(static::$useSearchableGloabalScopes && static::$automaticSearch) {
+            
+            static::addGlobalScope('search', function (Builder $builder) {
+    
+                if (request()->has("search") && request()->get("search")) {
+                    $builder->search(request()->get("search"));
                 }
             });
+        }
 
-            $builder->filter($filters);
-        });
+        if(static::$useSearchableGloabalScopes && static::$automaticFilter) {
+          
+            static::addGlobalScope('filter', function (Builder $builder) {
+
+                $filters = [];
+               
+                $builder->getModel()->filterColumns()->each(function ($column) use (&$filters) {
+    
+                    $filters[$column] = filterParam($column) ;
+                });
+    
+                $builder->filter($filters);
+            });
+        }
+       
     }
 
 
-    public function scopeSearch(Builder $q, $searchWord, ?array $columns = null)
+    public function scopeSearch(Builder $q, $searchWord, ?iterable $columns = null)
     {
         $q->with($this->eagerLoadRelations())->where(function ($q) use ($columns, $searchWord) {
-            collect($columns ?? $this->searchable["columns"] ??  [])->each($this->searchBy($q, $searchWord));
+
+            $this->searchColumns($columns)->each($this->searchBy($q, $searchWord));
         });
     }
 
     public function scopeFilter(Builder $q, iterable $filters)
     {
 
-        collect($filters)->each(function ($filterCondition, $column) use ($q) {
+        collect($filters)->filter()->each(function ($filterCondition, $column) use ($q) {
 
             [$operator, $filterWord] = $this->wordAndOperator($filterCondition);
             $q->search($filterWord, [$column => $this->filterOptions($operator)]);
@@ -57,12 +61,11 @@ trait Searchable
 
     public function searchColumns(?array $columns = null)
     {
-        return collect($columns ?? $this->searchable["columns"] ??  []);
+        return collect($columns ?? $this->searchable["columns"] ??  [])->filter();
     }
 
     public function filterColumns()
     {
-
         return $this->searchColumns()->merge($this->fillable ?? []);
     }
 
