@@ -3,6 +3,7 @@
 namespace Abdo\Searchable;
 
 use Closure;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Stringable;
@@ -10,14 +11,12 @@ use Stringable;
 class SearchColumn
 {
 
-    private SearchColumnOptions $configuration;
 
     public function __construct(
         private Model $model,
         private string $name,
-        array $configuration = []
+        private SearchColumnOptions $configuration = new SearchColumnOptions()
     ) {
-        $this->configuration = new SearchColumnOptions($configuration);
     }
 
 
@@ -31,7 +30,6 @@ class SearchColumn
         return function ($q, $searchWord) {
 
             if ($this->isRelation()) {
-
                 return $this->relationSearch($q, $searchWord);
             }
 
@@ -39,14 +37,14 @@ class SearchColumn
         };
     }
 
-    public function nonRelationSearch($q, $searchWord): void
+    public function nonRelationSearch(Builder $q, string $searchWord)
     {
         $this->callAddConditionCallable($q, $searchWord);
         $q->{$this->configuration->searchMethod()}(...$this->configuration->searchAgruments($this->name, $searchWord));
     }
 
 
-    public function relationSearch($q, $searchWord): void
+    public function relationSearch(Builder $q, string $searchWord): void
     {
 
         [$relation, $column] = $this->getRelationAndColumn();
@@ -70,9 +68,14 @@ class SearchColumn
         return [$this->model, $this->customSearchMethodName()];
     }
 
-    public function conventionMethod(): string
+    public function conventionCustomMethod(): string
     {
         return "search" . Str::of($this->name)->remove(".");
+    }
+
+    public function conventionAddSearchMethod(): string
+    {
+        return "searchAdd" . Str::of($this->name)->remove(".");
     }
 
     public function getRelationAndColumn(): array
@@ -81,20 +84,32 @@ class SearchColumn
         return [strrev($reversedParts[1]), strrev($reversedParts[0])];
     }
 
-    public function hasAddConditionToSearchMethod(): bool
-    {
-        return isset($this->searchable()["add_condition"][$this->name])
-            && method_exists($this->model, $this->searchable()["add_condition"][$this->name]);
-    }
 
     public function isRelation(): bool
     {
         return $this->strName()->contains(".");
     }
 
+    public function hasAddConditionToSearchMethod(): bool
+    {
+        return $this->hasMethodInAddConditionArray() || $this->hasconventionAddSearchMethod();
+    }
+
+    public function hasMethodInAddConditionArray()
+    {
+
+        return isset($this->searchable()["add"][$this->name])
+            && method_exists($this->model, $this->searchable()["add"][$this->name]);
+    }
+
+    public function hasconventionAddSearchMethod()
+    {
+        return method_exists($this->model, "searchAdd" . $this->strName()->remove("."));
+    }
+
     public function hasCustomSearchMethod(): bool
     {
-        return $this->hasMethodInCustomArray() || $this->hasConventionMethod();
+        return $this->hasMethodInCustomArray() || $this->hasConventionCustomMethod();
     }
 
     public function hasMethodInCustomArray(): bool
@@ -103,16 +118,17 @@ class SearchColumn
             && method_exists($this->model, $this->searchable()["custom"][$this->name]);
     }
 
-    public function hasConventionMethod(): bool
+    public function hasConventionCustomMethod(): bool
     {
         return method_exists($this->model, "search" . $this->strName()->remove("."));
     }
 
-  
-    protected function relationSearchCustomMethod(): Closure
+
+    protected function relationSearchCustomMethod(): callable
     {
 
         return function ($q, $searchWord) {
+
             [$relation] = $this->getRelationAndColumn();
 
             $q->orWhereHas($relation, function ($q) use ($searchWord) {
@@ -126,10 +142,10 @@ class SearchColumn
 
     protected function customSearchMethodName(): string
     {
-        return $this->searchable()["custom"][$this->name] ?? $this->conventionMethod();
+        return $this->searchable()["custom"][$this->name] ?? $this->conventionCustomMethod();
     }
-
-    protected function callAddConditionCallable($q, $searchWord): void
+    
+    protected function callAddConditionCallable(Builder $q, string $searchWord)
     {
         if ($this->hasAddConditionToSearchMethod() && $this->configuration->usesAddCondition()) {
             $this->addConditionToSearchMethod()($q, $searchWord);
@@ -138,9 +154,8 @@ class SearchColumn
 
     protected function addConditionToSearchMethod(): callable
     {
-        return [$this->model, $this->searchable()["add_condition"][$this->name]];
+        return [$this->model, $this->searchable()["add"][$this->name] ?? $this->conventionAddSearchMethod()];
     }
-
 
     protected function searchable(): array
     {
