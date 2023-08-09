@@ -2,9 +2,11 @@
 
 namespace Abdo\Searchable;
 
+use Abdo\Searchable\AttributeHandler\AttributeHandler;
+use Abdo\Searchable\Attributes\FilterColumns;
+use Abdo\Searchable\Attributes\SearchColumns;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-use Spatie\LaravelIgnition\Recorders\DumpRecorder\Dump;
 
 trait Searchable
 {
@@ -46,7 +48,6 @@ trait Searchable
         });
     }
 
-
     public function detectFiltersFromQueryString()
     {
 
@@ -61,12 +62,14 @@ trait Searchable
 
     public function searchColumns(?array $columns = null): Collection
     {
-        return collect($columns ?? $this->searchable["columns"] ?? $this->fillable ??  [])->filter();
+        return collect($columns ?? $this->searchable()["columns"] ?? $this->fillable ??  [])->filter();
     }
 
     public function filterColumns(): Collection
     {
-        return $this->searchColumns()->merge($this->fillable ?? []);
+        return $this->filterAble()
+            ? collect($this->filterAble())
+            : $this->searchColumns()->merge($this->fillable ?? []);
     }
 
     public static function isUsingAutomaticSearch(): bool
@@ -89,7 +92,7 @@ trait Searchable
 
     private function eagerLoadRelations(): array
     {
-        return $this->searchable["eager"] ?? [];
+        return $this->searchable()["eager"] ?? [];
     }
 
     private function coloumnAndOptions($value, $index): array
@@ -109,5 +112,17 @@ trait Searchable
     private function filterOptions($operator): array
     {
         return ["operator" => $operator, "useCustom" => false, "useAddCondition" => false];
+    }
+
+    private function searchable(): ?array
+    {
+        return (new AttributeHandler($this))
+            ->findPropertyValue(SearchColumns::class);
+    }
+
+    private function filterAble(): ?array
+    {
+        return (new AttributeHandler($this))
+            ->findPropertyValue(FilterColumns::class);
     }
 }
