@@ -21,22 +21,22 @@ use Abdo\Searchable\Attributes\SearchAdd;
 use Abdo\Searchable\Attributes\SearchColumns;
 class User extends Authenticatable
 {
-		use Searchable;
-
-		#[SearchColumns]
-		public $searchable = [
-        "columns" => [
-            "name",
-            "email",
-            "role.name",
-            "created_at"
-        ],
-				"eager" => [
-					"role"
-				]
+    use Searchable;
+	
+    #[SearchColumns]
+    public $searchable = [
+	"columns" => [
+	    "name",
+	    "email",
+	    "role.name",
+	    "created_at"
+	],
+	"eager" => [
+	    "role"
+	]
     ];
 
-		#[SearchAdd("created_at")]
+    #[SearchAdd("created_at")]
     public function searchByCreatedAtDayName(Builder $q, $searchWord) {
         $q->orWhereRaw("DAYNAME(created_at) like ?", ["%" . $searchWord . "%"]);
     }
@@ -62,12 +62,12 @@ if its not set the fillable columns will be used instead
 public $searchable = [
     "columns" => [
         "colame",
-				"relation.colname",
+	"relation.colname",
         "relation.relation.colname",
     ],
-		"eager" => [
-			"relation"
-		]
+    "eager" => [
+        "relation"
+    ]
 ];
 ```
 
@@ -88,7 +88,7 @@ public $searchable = [
 #[Search("time")]
 public function searchTime(Builder $q, $searchWord) {
      $q->orWhere("time", "like", "%" . $searchWord . "%")
-			 ->orWhereRaw("DAYNAME(time) like ?", ["%" . $searchWord . "%"]);
+       ->orWhereRaw("DAYNAME(time) like ?", ["%" . $searchWord . "%"]);
 }
 ```
 
@@ -114,8 +114,8 @@ public $searchable = [
 
 #[Search(”patient.name”)]// or #[SearchAdd(”patient.name”)]
 public function searchPatientName(Builder $q, $searchWord) {
-	 // $q is builder instance for Patient model 
-	 $q->orWhere("name", "like", "%" . $searchWord . "%");
+     // $q is builder instance for Patient model 
+     $q->orWhere("name", "like", "%" . $searchWord . "%");
 }
 ```
 
@@ -140,7 +140,7 @@ public $searchable = [
 ];
 
 User::search($searchWord,[
-	"name" => ["operator" => "=", "useCustom" => false, "useAddCondition" => false] 
+    "name" => ["operator" => "=", "useCustom" => false, "useAddCondition" => false] 
 ])
 ```
 
@@ -149,5 +149,5 @@ the column can have three options
 | option |                          description |                          values |      default |
 | --- | --- | --- | --- |
 | operator | the operator used for searching operation | will be explained later in filtering part | likeContains |
-| useCustom | if it uses search method that has  #[Search(”col”)] | true or false | true |
-| useAddCondition | if it uses search methods that has  #[SearchAdd(”col”)] | true or false | true |
+| useCustom | if it uses search method that has             #[Search(”col”)] | true or false | true |
+| useAddCondition | if it uses search methods that has      #[SearchAdd(”col”)] | true or false | true |
