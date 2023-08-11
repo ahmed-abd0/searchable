@@ -189,8 +189,6 @@ the column can have three options
 ```php
 // model
 use Abdo\Searchable\Searchable;
-use Abdo\Searchable\Attributes\SearchAdd;
-use Abdo\Searchable\Attributes\SearchColumns;
 class User extends Authenticatable
 {
 	use Searchable;
