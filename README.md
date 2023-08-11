@@ -191,10 +191,10 @@ the column can have three options
 use Abdo\Searchable\Searchable;
 class User extends Authenticatable
 {
-	use Searchable;
+     use Searchable;
 
-	#[SearchColumns]
-	public $searchable = [
+     #[SearchColumns]
+     public $searchable = [
         "columns" => [
             "name",
             "email",
