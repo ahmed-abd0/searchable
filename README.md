@@ -35,7 +35,7 @@ Laravel  Searchable is package that adds easy customizable  searching and filter
 ```php
 composer require ahmedabdo/searchable
 ```
-# Searching
+## Searching
 
 ## Usage Example
 
