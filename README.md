@@ -176,7 +176,7 @@ the column can have three options
 
 | option |                          description |                          values |      default |
 | --- | --- | --- | --- |
-| operator | the operator used for searching operation | will be explained later in filtering part | likeContains |
+| operator | the operator used for searching operation | [Avaliable Operators](#operators) | likeContains |
 | useCustom | if it uses search method that has             #[Search(”col”)] | true or false | true |
 | useAddCondition | if it uses search methods that has      #[SearchAdd(”col”)] | true or false | true |
 
