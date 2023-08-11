@@ -278,7 +278,7 @@ the operators allowed to be use in filtering is any operator you can send to  �
 
 ### Filter Blade Script
 
-if you are using regular blade for front end there is a simple js script that makes it easier to create filter forms you need to include `“*@searcableScripts”`  directive in your main layout* 
+if you are using regular blade for front end there is a simple js script that makes it easier to create filter forms you need to include `“@searcableScripts”`  directive in your main layout 
 
 then you can create filter form like this
 
