@@ -10,7 +10,7 @@ class SearchColumnOptions
     }
 
     public function operator() : string {
-        return $this->options["operator"] ?? "likeContains";
+        return $this->options["operator"] ?? "Contains";
     }
 
     public function usesCustom() {
@@ -32,9 +32,9 @@ class SearchColumnOptions
             "TO", "TO_TIME" => [$columnName, "<" , $searchWord],
             "FROM", "FROM_TIME" => [$columnName, ">" , $searchWord],
             "IN", "NOTIN" => [$columnName, explode(",",$searchWord)],
-            "LIKEENDSWITH", "LEW" => [$columnName , "like", "%" . $searchWord],
-            "LIKESTARTSWITH", "LSW" => [$columnName , "like", $searchWord."%" ],
-            "LIKECONTAINS", "LC" => [$columnName , "like", "%".$searchWord."%" ],
+            "ENDSWITH", "EW" => [$columnName , "like", "%" . $searchWord],
+            "STARTSWITH", "SW" => [$columnName , "like", $searchWord."%" ],
+            "CONTAINS", "CONT" => [$columnName , "like", "%".$searchWord."%" ],
             default => [$columnName , $this->operator(), $searchWord]
         };
     }
