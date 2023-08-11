@@ -261,21 +261,21 @@ the operators allowed to be use in filtering is any operator you can send to  �
 
 |             Operator |                                     Description | Example |
 | --- | --- | --- |
-| “contains” or “cont”  | filter the results that contains the given  value    | ?name=cont|med matches name=”ahmed abdo”  |
-| “startsWith” or “sw” | filter the results that starts with the given  value    | ?name=sw|ahmed matches name=”ahmed abdo”  |
-| “endsWith” or “ew” | filter the results that ends with the given  value    | ?name=ew|abdo matches name=”ahmed abdo”  |
-| “In” | filter the results that  exists in the given values    | ?role_id=in|1,2,3,4,5  |
-| “notIn” | filter the results that dosen’t exists in the given values    | ?role_id=notIn|1,5  |
-| “from” | used for filtering dates that is after the given value | ?created_at=from|2010-01-01 |
-| “from_eq” | used for filtering dates that is after or equal the given value | ?created_at=from_eq|2010-01-01 |
-| “to” | used for filtering dates that is before the given value | ?created_at=to|2010-01-01 |
-| “to_eq” | used for filtering dates that is before or equal the given value | ?created_at=to_eq|2010-01-01 |
-| “from_time” | same as “from” but for time | ?time=from_time|12:30 |
-| “from_time_eq” | same as “from_eq” but for time | ?time=from_time_eq|12:30 |
-| “to_time” | same as “to” but for time | ?time=to_time|12:30 |
-| “to_time_eq” | same as “to_eq” but for time | ?time=to_time_eq|12:30 |
-| “between” or “bt” | filtering results that lies in given range | ?created_at=bt|2010-01-01,2015-01-01&role_id=bt|3,5 |
-| “where” statement operators | any operator used in “where” method can be used as filter operator | ?age=<|20&gender=male |
+| “contains” or “cont”  | filter the results that contains the given  value    | ?name=cont\|med matches name=”ahmed abdo”  |
+| “startsWith” or “sw” | filter the results that starts with the given  value    | ?name=sw\|ahmed matches name=”ahmed abdo”  |
+| “endsWith” or “ew” | filter the results that ends with the given  value    | ?name=ew\|abdo matches name=”ahmed abdo”  |
+| “In” | filter the results that  exists in the given values    | ?role_id=in\|1,2,3,4,5  |
+| “notIn” | filter the results that dosen’t exists in the given values    | ?role_id=notIn\|1,5  |
+| “from” | used for filtering dates that is after the given value | ?created_at=from\|2010-01-01 |
+| “from_eq” | used for filtering dates that is after or equal the given value | ?created_at=from_eq\|2010-01-01 |
+| “to” | used for filtering dates that is before the given value | ?created_at=to\|2010-01-01 |
+| “to_eq” | used for filtering dates that is before or equal the given value | ?created_at=to_eq\|2010-01-01 |
+| “from_time” | same as “from” but for time | ?time=from_time\|12:30 |
+| “from_time_eq” | same as “from_eq” but for time | ?time=from_time_eq\|12:30 |
+| “to_time” | same as “to” but for time | ?time=to_time\|12:30 |
+| “to_time_eq” | same as “to_eq” but for time | ?time=to_time_eq\|12:30 |
+| “between” or “bt” | filtering results that lies in given range | ?created_at=bt\|2010-01-01,2015-01-01&role_id=bt\|3,5 |
+| “where” statement operators | any operator used in “where” method can be used as filter operator | ?age=<\|20&gender=male |
 
 ### Filter Blade Script
 
