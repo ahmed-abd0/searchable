@@ -103,7 +103,7 @@ public function searchTimeByDayName(Builder $q, $searchWord) {
 }
 ```
 
-if you used on of `#[Search(”colname”)]` or `#[Search(”colname”)]` for customizing relation search the builder instance passed to the custom method will be the builder for the relation model
+if you used on of `#[Search(”colname”)]` or `#[SearchAdd(”colname”)]` for customizing relation search the builder instance passed to the custom method will be the builder for the relation model
 
 ```php
 public $searchable = [
