@@ -37,7 +37,7 @@ composer require ahmedabdo/searchable
 ```
 ## Searching
 
-## Usage Example
+## Search Usage Example
 
 - first use Abdo\Searchable\Searchable trait in your model
 - then define the columns you want to use for searching in searchable array like below
