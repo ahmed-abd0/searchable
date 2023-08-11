@@ -35,6 +35,7 @@ Laravel  Searchable is package that adds easy customizable  searching and filter
 ```php
 composer require ahmedabdo/searchable
 ```
+# Searching
 
 ## Usage Example
 
@@ -183,7 +184,7 @@ the column can have three options
 
 ## Filtering
 
-### Filter Using Example
+### Filter Usage Example
 
 ```php
 // model
