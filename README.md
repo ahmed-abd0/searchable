@@ -287,8 +287,8 @@ then you can create filter form like this
 <!-- give the form class  'filter' -->
 <form action="" class="filter">
     <label for="">Age</label>
-		<!-- place the filter operator in 'data-filter' attribute  -->
-		<input data-filter=">" type="number" value="{{filterValue("age")}}" name="age" id="">
+    <!-- place the filter operator in 'data-filter' attribute  -->
+    <input data-filter=">" type="number" value="{{filterValue("age")}}" name="age" id="">
     
     <label for="">Created At From</label>
     <input data-filter="bt" type="date" value="{{filterValue("created_at", asArray: true)[0] ?? now()->format("Y-m-d")}}" name="created_at[0]" id="">
@@ -324,7 +324,7 @@ public $searchable = [
 
 //blade
 <form action="" class="filter">
-		<input data-filter="contains" type="text" value="{{filterValue('empName')}}" name="empName" id="">
+    <input data-filter="contains" type="text" value="{{filterValue('empName')}}" name="empName" id="">
 </form>
 
 //usage
