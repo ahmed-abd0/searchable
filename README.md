@@ -191,10 +191,10 @@ the column can have three options
 use Abdo\Searchable\Searchable;
 class User extends Authenticatable
 {
-	use Searchable;
+     use Searchable;
 
-	#[SearchColumns]
-	public $searchable = [
+     #[SearchColumns]
+     public $searchable = [
         "columns" => [
             "name",
             "email",
@@ -278,7 +278,7 @@ the operators allowed to be use in filtering is any operator you can send to  �
 
 ### Filter Blade Script
 
-if you are using regular blade for front end there is a simple js script that makes it easier to create filter forms you need to include `“*@searcableScripts”`  directive in your main layout* 
+if you are using regular blade for front end there is a simple js script that makes it easier to create filter forms you need to include `“@searcableScripts”`  directive in your main layout 
 
 then you can create filter form like this
 
