@@ -153,7 +153,7 @@ public function searchPatientName(Builder $q, $searchWord) {
 if you want to overwrite the columns defined in the model you may pass columns as second parameter for the search scope
 
 ```php
-User::seach($searchWord, ["fname", "lname"])->get();
+User::search($searchWord, ["fname", "lname"])->get();
 ```
 
 ### Search Options
@@ -247,11 +247,11 @@ if you used parameter name different from column name you can pass the column an
 // ?<not-colname>=<operator, default:"=">|<value>
 // filterParam is helper to get the filter value from query string
 // in this example you can use request("not-colname") to get the value 
-User::filter(["colname" => filterParam("not-colname")])->get();
+User::filter(["column_name" => filterParam("not_column_name")])->get();
 
 // note: if the rest of the query string params names
 // are the same as colnames you can do something like this 
-User::filter(["colname" => filterParam("not-colname")])->filter()->get(); 
+User::filter(["column_name" => filterParam("not_column_name")])->filter()->get(); 
 ```
 
 ### Operators
