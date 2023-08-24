@@ -27,17 +27,23 @@ class ServiceProvider extends laravelServiceProvider
 
         Builder::macro('orBetweenEqualMacro', function ($column, array $range) {
 
+            $from = ($from = $range[0] ?? null) === '' ? null : $from ;
+            $to = ($to = $range[1] ?? null) === '' ? null : $to ;
+
             return $this->orWhereRaw(
                 "($column >= ? OR ? IS NULL) AND ($column <= ? OR ? IS NULL)",
-                [$range[0] ?? null, $range[0] ?? null, $range[1] ?? null, $range[1] ?? null]
+                [$from, $from, $to, $to]
             );
         });
 
         Builder::macro('orBetweenMacro', function ($column, array $range) {
 
+            $from = ($from = $range[0] ?? null) === '' ? null : $from ;
+            $to = ($to = $range[1] ?? null) === '' ? null : $to ;
+
             return $this->orWhereRaw(
                 "($column > ? OR ? IS NULL) AND ($column < ? OR ? IS NULL)",
-                [$range[0] ?? null, $range[0] ?? null, $range[1] ?? null, $range[1] ?? null]
+                [$from, $from, $to, $to]
             );
         });
     }

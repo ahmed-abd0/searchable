@@ -8,9 +8,18 @@ if (!function_exists("filterParam")) {
 
         $queryParam = str_replace(".", ":", $queryParam);
 
-        return request()->has($queryParam) && is_array($param = request()->get($queryParam))
-            ? ($param["operator"] ?? "=") . "|" . collect($param)->forget("operator")->sortKeys()->implode(",")
-            : request()->get($queryParam);
+        if (request()->has($queryParam) && is_array($param = request($queryParam))) {
+
+            if (in_array($param["operator"] ?? "", ["bt", "bte", "between", "betweenEqual"])) {
+                
+                return $param["operator"] . "|" . ($param[0] ?? "") .",".($param[1] ?? "");
+            }
+
+            return ($param["operator"] ?? "=") . "|" . collect($param)->forget("operator")->implode(",");
+        }
+
+
+        return request($queryParam);
     }
 }
 
