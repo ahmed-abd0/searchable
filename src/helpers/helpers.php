@@ -18,10 +18,9 @@ if (!function_exists("filterValue")) {
 
     function filterValue(string $queryParam, bool $asArray = false): string|array
     {
-
         $arr = explode("|", filterParam($queryParam), 2);
 
-        return $asArray ? explode(",", end($arr)) : end($arr);
+        return $asArray && str_contains(end($arr), ",") ? explode(",", end($arr)) : end($arr);
     }
 }
 
