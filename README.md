@@ -274,6 +274,7 @@ the operators allowed to be use in filtering is any operator you can send to  �
 | “to_time” | same as “to” but for time | ?time=to_time\|12:30 |
 | “to_time_eq” | same as “to_eq” but for time | ?time=to_time_eq\|12:30 |
 | “between” or “bt” | filtering results that lies in given range | ?created_at=bt\|2010-01-01,2015-01-01&role_id=bt\|3,5 |
+| “betweenEqual” or “bte” | filtering results that lies in given range with boundry | ?created_at=bt\|2010-01-01,2015-01-01&role_id=bt\|3,5 |
 | “where” statement operators | any operator used in “where” method can be used as filter operator | ?age=<\|20&gender=male |
 
 ### Filter Blade Script

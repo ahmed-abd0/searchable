@@ -30,7 +30,6 @@
 
 
         if (event.target.classList.contains("filter")) {
-
             const inputs = event.target.querySelectorAll("input:not(.searchable-value,.searchable-operator),select");
 
             inputs.forEach(input => {
@@ -46,7 +45,9 @@
                 if (!wrapper) {
                     insertHiddenInputsFor(input);
                 } else {
-                    wrapper.querySelector("input.searchable-value").value = input.value;
+                    if(wrapper.querySelector("input.searchable-value")) {
+                        wrapper.querySelector("input.searchable-value").value = input.value;
+                    }
                 }
 
             });

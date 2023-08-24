@@ -57,6 +57,7 @@ class SearchColumn
             $q->where(function ($q) use ($column, $searchWord) {
 
                 $this->callAddConditionCallables($q, $searchWord);
+
                 $q->{$this->configuration->searchMethod()}(...$this->configuration->searchAgruments($column, $searchWord));
             });
         });
