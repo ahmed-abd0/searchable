@@ -19,7 +19,7 @@ class SearchColumn
     public function __construct(
         private Model $model,
         private string $name,
-        private SearchColumnOptions $configuration = new SearchColumnOptions()
+        private ColumnConfigraution $configuration = new ColumnConfigraution()
     ) {
     }
 
@@ -83,7 +83,7 @@ class SearchColumn
         return $this->strName()->contains(".");
     }
 
-    public function hasCustomSearchMethod() : bool
+    public function hasCustomSearchMethod(): bool
     {
 
         return (new AttributeHandler($this->model))
@@ -115,7 +115,7 @@ class SearchColumn
         }
     }
 
-    protected function customSearchMethod() : Closure
+    protected function customSearchMethod(): Closure
     {
         return (new AttributeHandler($this->model))
             ->findMethod(Search::class, [$this->name])

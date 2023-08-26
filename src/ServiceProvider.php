@@ -10,9 +10,6 @@ class ServiceProvider extends laravelServiceProvider
 {
 
 
-    public function register()
-    {
-    }
 
     public function boot()
     {
@@ -25,7 +22,8 @@ class ServiceProvider extends laravelServiceProvider
             return "{!! view('searchable::script')->render() !!}";
         });
 
-        Builder::macro('orBetweenMacro', function ($column, array $range, $equal = "") {
+
+        Builder::macro('orBetweenMacro', function (string $column, array $range, string $equal = "") {
 
             [$from, $to] = getFromToFromRange($range);
 

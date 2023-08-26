@@ -43,7 +43,7 @@ trait Searchable
             [$operator, $filterWord] = $this->wordAndOperator($filterCondition);
 
             if ($filterWord !== null && $filterWord !== "") {
-                $q->search($filterWord, [$column => $this->filterOptions($operator)]);
+                $q->search($filterWord, [$column => $this->filterConfig($operator)]);
             }
         });
     }
@@ -82,9 +82,9 @@ trait Searchable
 
         return function ($value, $index) use ($q, $searchWord) {
 
-            [$column, $options] = $this->coloumnAndOptions($value, $index);
+            [$column, $config] = $this->coloumnAndConfig($value, $index);
 
-            $callable = (new SearchColumn($this, $column, new SearchColumnOptions($options)))->getColumnQuery();
+            $callable = (new SearchColumn($this, $column, new ColumnConfigraution($config)))->getColumnQuery();
 
             $callable($q, $searchWord);
         };
@@ -95,7 +95,7 @@ trait Searchable
         return $this->searchable()["eager"] ?? [];
     }
 
-    private function coloumnAndOptions($value, $index): array
+    private function coloumnAndConfig($value, $index): array
     {
         return is_string($index) ? [$index, $value] : [$value, []];
     }
@@ -109,7 +109,7 @@ trait Searchable
         return count($filterCondition) === 1 ? ["=", $filterCondition[0]] : $filterCondition;
     }
 
-    private function filterOptions($operator): array
+    private function filterConfig($operator): array
     {
         return ["operator" => $operator, "useCustom" => false, "useAddCondition" => false];
     }

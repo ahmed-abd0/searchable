@@ -26,30 +26,33 @@
 
     }
 
+    const updateFilterValue = (wrapper, value) => {
+        if (valueInput = wrapper.querySelector("input.searchable-value")) {
+            valueInput.value = value;
+        }
+    }
+
     document.addEventListener("submit", (event) => {
 
 
         if (event.target.classList.contains("filter")) {
-            const inputs = event.target.querySelectorAll("input:not(.searchable-value,.searchable-operator),select");
+
+            const inputs = event.target.querySelectorAll(
+                "input:not(.searchable-value,.searchable-operator),select"
+            );
 
             inputs.forEach(input => {
 
                 const wrapper = document.getElementById(
-                    `searchable-${input.name.replace(/\[.*\]/gm, "")}`);
+                    `searchable-${input.name.replace(/\[.*\]/gm, "")}`
+                );
 
                 if ((input.type === "checkbox" || input.type === "radio") && !input.checked) {
                     wrapper?.remove();
                     return;
                 }
 
-                if (!wrapper) {
-                    insertHiddenInputsFor(input);
-                } else {
-                    if(wrapper.querySelector("input.searchable-value")) {
-                        wrapper.querySelector("input.searchable-value").value = input.value;
-                    }
-                }
-
+                wrapper ? updateFilterValue(wrapper, input.value) : insertHiddenInputsFor(input);
             });
 
         }

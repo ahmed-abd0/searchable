@@ -3,23 +3,28 @@
 namespace Abdo\Searchable;
 
 
-class SearchColumnOptions
+class ColumnConfigraution
 {
 
-    public function __construct(private array $options = []) {
+    public function __construct(private array $config = []) {
     }
 
     public function operator() : string {
-        return $this->options["operator"] ?? "Contains";
+        return $this->config["operator"] ?? "Contains";
     }
 
     public function usesCustom() {
 
-        return $this->options["useCustom"] ?? true;
+        return $this->config["useCustom"] ?? true;
     }
 
     public function usesAddCondition() {
-        return $this->options["useAddCondition"] ?? true;
+        return $this->config["useAddCondition"] ?? true;
+    }
+
+    public static function betweenOperators() {
+        
+        return ["BETWEEN", "BT","BETWEENEQUAL", "BTE"];
     }
    
     public function searchAgruments(string $columnName, string $searchWord) : array {

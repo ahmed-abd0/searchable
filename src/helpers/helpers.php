@@ -1,5 +1,6 @@
 <?php
 
+use Abdo\Searchable\ColumnConfigraution;
 
 if (!function_exists("filterParam")) {
 
@@ -10,8 +11,7 @@ if (!function_exists("filterParam")) {
 
         if (request()->has($queryParam) && is_array($param = request($queryParam))) {
 
-            if (in_array($param["operator"] ?? "", ["bt", "bte", "between", "betweenEqual"])) {
-
+            if (in_array(strtoupper($param["operator"] ?? ""), ColumnConfigraution::betweenOperators())) {
                 return $param["operator"] . "|" . ($param[0] ?? "") . "," . ($param[1] ?? "");
             }
 
