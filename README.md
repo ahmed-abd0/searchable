@@ -281,21 +281,33 @@ the operators allowed to be use in filtering is any operator you can send to  �
 
 if you are using regular blade for front end there is a simple js script that makes it easier to create filter forms you need to include `“@searcableScripts”`  directive in your main layout 
 
-then you can create filter form like this
+then you can create filter form like by following steps
+
+### Usage:
+
+- give the form class filter
+- input name should be like column name
+- for relations you can use “:” as separator ex: `relation:columnName`
+- set the filtering operator in the `data-filter` attribute the default is `=`
+- use `filterValue("queryParam")` to get the filter value
 
 ```html
 <!-- give the form class  'filter' -->
 <form action="" class="filter">
     <label for="">Age</label>
     <!-- place the filter operator in 'data-filter' attribute  -->
+    <!-- filterValue helper for getting the current filter value  -->
     <input data-filter=">" type="number" value="{{filterValue("age")}}" name="age" id="">
     
     <label for="">Created At From</label>
+    <!-- for bte, bt, betweenEqual, between operators  -->
+    <!-- ex: from input with name created_at[0] to input with name created_at[1]  -->
     <input data-filter="bt" type="date" value="{{filterValue("created_at", asArray: true)[0] ?? now()->format("Y-m-d")}}" name="created_at[0]" id="">
 
     <label for="">Created At To</label>
     <input type="date" value="{{filterValue("created_at", asArray: true)[1] ?? now()->format("Y-m-d")}}" name="created_at[1]" id="">
-
+			
+    <!-- ex: for multi value   -->
     <label for="">Role</label>
     <select data-filter="in"  name="role_id[]" id="" multiple>
         <option value="0">admin</option>
