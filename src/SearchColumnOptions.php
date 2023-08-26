@@ -21,15 +21,13 @@ class SearchColumnOptions
     public function usesAddCondition() {
         return $this->options["useAddCondition"] ?? true;
     }
-
    
     public function searchAgruments(string $columnName, string $searchWord) : array {
        
-
-
         return match(strtoupper($this->operator())) {
             
-            "BETWEEN", "BT","BETWEENEQUAL", "BTE" => [$columnName, explode(",", $searchWord, 2)],
+            "BETWEENEQUAL", "BTE" => [$columnName, explode(",", $searchWord, 2), "="],
+            "BETWEEN", "BT" => [$columnName, explode(",", $searchWord, 2)],
             "TO_EQ", "TO_TIME_EQ" => [$columnName, "<=" , $searchWord],
             "FROM_EQ", "FROM_TIME_EQ" => [$columnName, ">=" , $searchWord],
             "TO", "TO_TIME" => [$columnName, "<" , $searchWord],
@@ -46,8 +44,7 @@ class SearchColumnOptions
         
         return match(strtoupper($this->operator())) {            
             
-            "BETWEEN", "BT" => "orBetweenMacro",
-            "BETWEENEQUAL", "BTE" => "orBetweenEqualMacro",
+            "BETWEEN", "BT","BETWEENEQUAL", "BTE" => "orBetweenMacro",
             "FROM_TIME", "TO_TIME", "FROM_TIME_EQ", "TO_TIME_EQ" => "orWhereTime",
             "FROM", "TO", "FROM_EQ", "TO_EQ" => "orWhereDate",
             "NOTIN" => "orWhereNotIn",
@@ -55,7 +52,5 @@ class SearchColumnOptions
             default => "orWhere"
         };
     }
-
-
 
 }

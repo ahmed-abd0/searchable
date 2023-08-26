@@ -11,8 +11,8 @@ if (!function_exists("filterParam")) {
         if (request()->has($queryParam) && is_array($param = request($queryParam))) {
 
             if (in_array($param["operator"] ?? "", ["bt", "bte", "between", "betweenEqual"])) {
-                
-                return $param["operator"] . "|" . ($param[0] ?? "") .",".($param[1] ?? "");
+
+                return $param["operator"] . "|" . ($param[0] ?? "") . "," . ($param[1] ?? "");
             }
 
             return ($param["operator"] ?? "=") . "|" . collect($param)->forget("operator")->implode(",");
@@ -45,5 +45,17 @@ if (!function_exists("implodeRecursive")) {
         }
 
         return rtrim($result, $separator);
+    }
+}
+
+if (!function_exists("getFromToFromRange")) {
+
+    function getFromToFromRange(array $range)
+    {
+
+        return [
+            ($from = $range[0] ?? null) === '' ? null : $from,
+            ($to = $range[1] ?? null) === '' ? null : $to
+        ];
     }
 }

@@ -25,24 +25,12 @@ class ServiceProvider extends laravelServiceProvider
             return "{!! view('searchable::script')->render() !!}";
         });
 
-        Builder::macro('orBetweenEqualMacro', function ($column, array $range) {
+        Builder::macro('orBetweenMacro', function ($column, array $range, $equal = "") {
 
-            $from = ($from = $range[0] ?? null) === '' ? null : $from ;
-            $to = ($to = $range[1] ?? null) === '' ? null : $to ;
-
-            return $this->orWhereRaw(
-                "($column >= ? OR ? IS NULL) AND ($column <= ? OR ? IS NULL)",
-                [$from, $from, $to, $to]
-            );
-        });
-
-        Builder::macro('orBetweenMacro', function ($column, array $range) {
-
-            $from = ($from = $range[0] ?? null) === '' ? null : $from ;
-            $to = ($to = $range[1] ?? null) === '' ? null : $to ;
+            [$from, $to] = getFromToFromRange($range);
 
             return $this->orWhereRaw(
-                "($column > ? OR ? IS NULL) AND ($column < ? OR ? IS NULL)",
+                "($column >{$equal} ? OR ? IS NULL) AND ($column <{$equal} ? OR ? IS NULL)",
                 [$from, $from, $to, $to]
             );
         });
