@@ -40,6 +40,7 @@ if (!function_exists("implodeRecursive")) {
     {
 
         $result = '';
+        
         foreach ($array as $value) {
             $result = $result . (is_array($value) ? implodeRecursive($value, $separator) . $separator : $value . $separator);
         }
@@ -48,14 +49,4 @@ if (!function_exists("implodeRecursive")) {
     }
 }
 
-if (!function_exists("getFromToFromRange")) {
 
-    function getFromToFromRange(array $range)
-    {
-
-        return [
-            ($from = $range[0] ?? null) === '' ? null : $from,
-            ($to = $range[1] ?? null) === '' ? null : $to
-        ];
-    }
-}

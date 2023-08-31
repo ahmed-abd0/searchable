@@ -25,12 +25,22 @@ class ServiceProvider extends laravelServiceProvider
 
         Builder::macro('orBetweenMacro', function (string $column, array $range, string $equal = "") {
 
-            [$from, $to] = getFromToFromRange($range);
+            [$from, $to] = $this->getFromToFromRange($range);
 
             return $this->orWhereRaw(
                 "($column >{$equal} ? OR ? IS NULL) AND ($column <{$equal} ? OR ? IS NULL)",
                 [$from, $from, $to, $to]
             );
         });
+      
+    }
+
+    private function getFromToFromRange(array $range)
+    {
+
+        return [
+            ($from = $range[0] ?? null) === '' ? null : $from,
+            ($to = $range[1] ?? null) === '' ? null : $to
+        ];
     }
 }
