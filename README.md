@@ -82,7 +82,7 @@ you can define your search columns in property that has `#[SearchColumns]` attri
 
 it will contain the default columns for searching the model and relations that needs
 
-to be eager loaded with searching 
+to be eager loaded
 
 if its not set the fillable columns will be used instead
 
@@ -297,15 +297,15 @@ then you can create filter form like by following steps
     <label for="">Age</label>
     <!-- place the filter operator in 'data-filter' attribute  -->
     <!-- filterValue helper for getting the current filter value  -->
-    <input data-filter=">" type="number" value="{{filterValue("age")}}" name="age" id="">
+    <input data-filter=">" type="number" value="{{filterValue('age')}}" name="age" id="">
     
     <label for="">Created At From</label>
     <!-- for bte, bt, betweenEqual, between operators  -->
     <!-- ex: from input with name created_at[0] to input with name created_at[1]  -->
-    <input data-filter="bt" type="date" value="{{filterValue("created_at", asArray: true)[0] ?? now()->format("Y-m-d")}}" name="created_at[0]" id="">
+    <input data-filter="bt" type="date" value="{{filterValue('created_at', asArray: true)[0] ?? now()->format('Y-m-d')}}" name="created_at[0]" id="">
 
     <label for="">Created At To</label>
-    <input type="date" value="{{filterValue("created_at", asArray: true)[1] ?? now()->format("Y-m-d")}}" name="created_at[1]" id="">
+    <input type="date" value="{{filterValue('created_at', asArray: true)[1] ?? now()->format('Y-m-d')}}" name="created_at[1]" id="">
 			
     <!-- ex: for multi value   -->
     <label for="">Role</label>
