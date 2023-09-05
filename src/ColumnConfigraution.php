@@ -6,56 +6,61 @@ namespace Abdo\Searchable;
 class ColumnConfigraution
 {
 
-    public function __construct(private array $config = []) {
+    public function __construct(private array $config = [])
+    {
     }
 
-    public function operator() : string {
+    public function operator(): string
+    {
         return $this->config["operator"] ?? "Contains";
     }
 
-    public function usesCustom() {
+    public function usesCustom()
+    {
 
         return $this->config["useCustom"] ?? true;
     }
 
-    public function usesAddCondition() {
+    public function usesAddCondition()
+    {
         return $this->config["useAddCondition"] ?? true;
     }
 
-    public static function betweenOperators() {
-        
-        return ["BETWEEN", "BT","BETWEENEQUAL", "BTE"];
+    public static function betweenOperators()
+    {
+        return ["BETWEEN", "BT", "BETWEENEQUAL", "BTE"];
     }
-   
-    public function searchAgruments(string $columnName, string $searchWord) : array {
-       
-        return match(strtoupper($this->operator())) {
-            
-            "BETWEENEQUAL", "BTE" => [$columnName, explode(",", $searchWord, 2), "="],
+
+    public function searchAgruments(string $columnName, string $searchWord): array
+    {
+
+        return match (strtoupper($this->operator())) {
+
+            "BETWEENEQUAL", "BTE" => [$columnName, explode(",", $searchWord, 2), true],
             "BETWEEN", "BT" => [$columnName, explode(",", $searchWord, 2)],
-            "TO_EQ", "TO_TIME_EQ" => [$columnName, "<=" , $searchWord],
-            "FROM_EQ", "FROM_TIME_EQ" => [$columnName, ">=" , $searchWord],
-            "TO", "TO_TIME" => [$columnName, "<" , $searchWord],
-            "FROM", "FROM_TIME" => [$columnName, ">" , $searchWord],
-            "IN", "NOTIN" => [$columnName, explode(",",$searchWord)],
-            "ENDSWITH", "EW" => [$columnName , "like", "%" . $searchWord],
-            "STARTSWITH", "SW" => [$columnName , "like", $searchWord."%" ],
-            "CONTAINS", "CONT" => [$columnName , "like", "%".$searchWord."%" ],
-            default => [$columnName , $this->operator(), $searchWord]
+            "TO_EQ", "TO_TIME_EQ" => [$columnName, "<=", $searchWord],
+            "FROM_EQ", "FROM_TIME_EQ" => [$columnName, ">=", $searchWord],
+            "TO", "TO_TIME" => [$columnName, "<", $searchWord],
+            "FROM", "FROM_TIME" => [$columnName, ">", $searchWord],
+            "IN", "NOTIN" => [$columnName, explode(",", $searchWord)],
+            "ENDSWITH", "EW" => [$columnName, "like", "%" . $searchWord],
+            "STARTSWITH", "SW" => [$columnName, "like", $searchWord . "%"],
+            "CONTAINS", "CONT" => [$columnName, "like", "%" . $searchWord . "%"],
+            default => [$columnName, $this->operator(), $searchWord]
         };
     }
 
-    public function searchMethod() : string {
-        
-        return match(strtoupper($this->operator())) {            
-            
-            "BETWEEN", "BT","BETWEENEQUAL", "BTE" => "orBetweenMacro",
+    public function searchMethod(): string
+    {
+
+        return match (strtoupper($this->operator())) {
+
+            "BETWEEN", "BT", "BETWEENEQUAL", "BTE" => "orBetweenMacro",
             "FROM_TIME", "TO_TIME", "FROM_TIME_EQ", "TO_TIME_EQ" => "orWhereTime",
             "FROM", "TO", "FROM_EQ", "TO_EQ" => "orWhereDate",
             "NOTIN" => "orWhereNotIn",
-            "IN" => "orWhereIn" ,
+            "IN" => "orWhereIn",
             default => "orWhere"
         };
     }
-
 }

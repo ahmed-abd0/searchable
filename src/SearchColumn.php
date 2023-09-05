@@ -111,7 +111,7 @@ class SearchColumn
     protected function callAddConditionCallables(Builder $q, string $searchWord)
     {
         if ($this->configuration->usesAddCondition()) {
-            $this->addConditionMethods()->each(fn ($method) => $method($q, $searchWord));
+            $this->addConditionMethods()->each->__invoke($q, $searchWord);
         }
     }
 
@@ -127,7 +127,7 @@ class SearchColumn
 
         return (new AttributeHandler($this->model))
             ->findMethods(SearchAdd::class, [$this->name])
-            ->map(fn ($method) => $method->getClosure($this->model));
+            ->map->getClosure($this->model);
     }
 
     protected function searchable(): array

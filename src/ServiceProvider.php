@@ -22,7 +22,6 @@ class ServiceProvider extends laravelServiceProvider
             return "{!! view('searchable::script')->render() !!}";
         });
 
-
         Builder::macro('orBetweenMacro', function (string $column, array $range, string $equal = "") {
 
             [$from, $to] = $this->getFromToFromRange($range);
