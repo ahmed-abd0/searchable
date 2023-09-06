@@ -31,6 +31,12 @@ class ColumnConfigraution
         return ["BETWEEN", "BT", "BETWEENEQUAL", "BTE"];
     }
 
+    
+    public static function isBetweenOperator(string $operator)
+    {
+        return in_array(strtoupper($operator), static::betweenOperators());
+    }
+
     public function searchAgruments(string $columnName, string $searchWord): array
     {
 

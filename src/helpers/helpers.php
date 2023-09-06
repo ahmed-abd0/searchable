@@ -11,13 +11,10 @@ if (!function_exists("filterParam")) {
 
         if (request()->has($queryParam) && is_array($param = request($queryParam))) {
 
-            if (in_array(strtoupper($param["operator"] ?? ""), ColumnConfigraution::betweenOperators())) {
-                return $param["operator"] . "|" . ($param[0] ?? "") . "," . ($param[1] ?? "");
-            }
-
-            return ($param["operator"] ?? "=") . "|" . collect($param)->forget("operator")->implode(",");
+            return ColumnConfigraution::isBetweenOperator($param["operator"] ?? '')
+                ? $param["operator"] . "|" . ($param[0] ?? "") . "," . ($param[1] ?? "")
+                : ($param["operator"] ?? "=") . "|" . collect($param)->forget("operator")->implode(",");
         }
-
 
         return request($queryParam);
     }
@@ -40,7 +37,7 @@ if (!function_exists("implodeRecursive")) {
     {
 
         $result = '';
-        
+
         foreach ($array as $value) {
             $result = $result . (is_array($value) ? implodeRecursive($value, $separator) . $separator : $value . $separator);
         }
@@ -48,5 +45,3 @@ if (!function_exists("implodeRecursive")) {
         return rtrim($result, $separator);
     }
 }
-
-
