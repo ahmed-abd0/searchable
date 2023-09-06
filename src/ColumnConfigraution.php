@@ -42,7 +42,7 @@ class ColumnConfigraution
 
         return match (strtoupper($this->operator())) {
 
-            "BETWEENEQUAL", "BTE" => [$columnName, explode(",", $searchWord, 2), true],
+            "BETWEENEQUAL", "BTE" => [$columnName, explode(",", $searchWord, 2), "="],
             "BETWEEN", "BT" => [$columnName, explode(",", $searchWord, 2)],
             "TO_EQ", "TO_TIME_EQ" => [$columnName, "<=", $searchWord],
             "FROM_EQ", "FROM_TIME_EQ" => [$columnName, ">=", $searchWord],
