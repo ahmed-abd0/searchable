@@ -45,3 +45,17 @@ if (!function_exists("implodeRecursive")) {
         return rtrim($result, $separator);
     }
 }
+
+    
+if(!function_exists('getFromToFromRange')) {
+
+    function getFromToFromRange(array $range)
+    {
+
+        return [
+            ($from = $range[0] ?? null) === '' ? null : $from,
+            ($to = $range[1] ?? null) === '' ? null : $to
+        ];
+    }
+}
+
