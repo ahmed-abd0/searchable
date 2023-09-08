@@ -2,6 +2,7 @@
 
 namespace Abdo\Searchable;
 
+use Abdo\Searchable\AttributeHandler\AttributeHandler;
 
 class ColumnConfigraution
 {
@@ -69,4 +70,6 @@ class ColumnConfigraution
             default => "orWhere"
         };
     }
+
+   
 }
