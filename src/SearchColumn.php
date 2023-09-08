@@ -117,9 +117,14 @@ class SearchColumn
 
     protected function customSearchMethod(): Closure
     {
-        return (new AttributeHandler($this->model))
-            ->findMethod(Search::class, [$this->name])
-            ?->getClosure($this->model);
+        return function ($q, $searchWord) {
+
+            (new AttributeHandler($this->model))
+                ->findMethod(Search::class, [$this->name])
+                ?->invoke($this->model, $q, $searchWord);
+
+            $this->callAddConditionCallables($q, $searchWord);
+        };
     }
 
     protected function addConditionMethods(): Collection
