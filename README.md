@@ -234,7 +234,7 @@ public $filterable = [
 
 ### Filter Query String
 
-the query string parameters names should be the same as column names or if you are filtering relation you can use “:” as separator between relation name and column name instead of  “.” and the query string should follow this pattern
+the query string parameters names should be the same as column names or if you are filtering relation you can use `:` as separator between relation name and column name instead of `.` and the query string should follow this pattern
 
 ```php
 // ?<colname>=<operator, default:"=">|<value>
