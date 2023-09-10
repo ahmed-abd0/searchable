@@ -288,7 +288,7 @@ then you can create filter form like by following steps
 
 - give the form class filter
 - input name should be like column name
-- for relations you can use “:” as separator ex: `relation:columnName`
+- for relations you can use `:` as separator ex: `relation:columnName`
 - set the filtering operator in the `data-filter` attribute the default is `=`
 - use `filterValue("queryParam")` to get the filter value
 
