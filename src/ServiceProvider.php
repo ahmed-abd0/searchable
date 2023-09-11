@@ -14,7 +14,7 @@ class ServiceProvider extends laravelServiceProvider
     public function boot()
     {
 
-        require_once __DIR__ . "/Helpers/Helpers.php";
+        require_once __DIR__ . "/helpers/helpers.php";
 
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'searchable');
 

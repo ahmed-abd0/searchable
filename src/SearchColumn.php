@@ -107,14 +107,6 @@ class SearchColumn
         };
     }
 
-
-    protected function callAddConditionCallables(Builder $q, string $searchWord)
-    {
-        if ($this->configuration->usesAddCondition()) {
-            $this->addConditionMethods()->each->__invoke($q, $searchWord);
-        }
-    }
-
     protected function customSearchMethod(): Closure
     {
         return function ($q, $searchWord) {
@@ -127,9 +119,16 @@ class SearchColumn
         };
     }
 
+    protected function callAddConditionCallables(Builder $q, string $searchWord)
+    {
+        if ($this->configuration->usesAddCondition()) {
+            $this->addConditionMethods()->each->__invoke($q, $searchWord);
+        }
+    }
+
     protected function addConditionMethods(): Collection
     {
-
+    
         return (new AttributeHandler($this->model))
             ->findMethods(SearchAdd::class, [$this->name])
             ->map->getClosure($this->model);
