@@ -102,7 +102,7 @@ public $searchable = [
 
 ### Custom Search
 
-if you want to customize searching query for on of the columns you can add method with 
+if you want to customize searching query for one of the columns you can add method with 
 
 `#[Search(”colname”)]` attribute and write your custom query for the selected column
 
@@ -121,9 +121,10 @@ public function searchTime(Builder $q, $searchWord) {
 }
 ```
 
-in the example above the time column is stored in the database as date time you may want to customize searching this column to add new `orWhere` statement for searching by day name 
+in the example above the time column is stored in the database as datetime you may want to customize searching this column to add new `orWhere` statement for searching by day name 
 
-but for doing that you wrote the same searching that the package provide so if you want to add new `orWhere` statement for the column search query you may use `#[SearchAdd(”colname”)]` attribute you may as many methods using this attribute as you want
+but for doing that you wrote the same searching query that the package provide so if you want to add new `orWhere` statement for the column search query you may use `#[SearchAdd(”colname”)]` attribute 
+**_NOTE:_**  you may as many searchAdd methods as you want. 
 
 ```php
 #[SearchAdd("time")]
@@ -132,7 +133,7 @@ public function searchTimeByDayName(Builder $q, $searchWord) {
 }
 ```
 
-if you used on of `#[Search(”colname”)]` or `#[SearchAdd(”colname”)]` for customizing relation search the builder instance passed to the custom method will be the builder for the relation model
+if you used on of `#[Search(”colname”)]` or `#[SearchAdd(”colname”)]` for customizing relation search the builder instance passed to the custom method will be builder for the relation model
 
 ```php
 public $searchable = [
@@ -233,7 +234,7 @@ public $filterable = [
 
 ### Filter Query String
 
-the query string parameters names should be the same as column names or if you are filtering relation you can use “:” as separator between relation name and column name instead of  “.” and the query string should follow this pattern
+the query string parameters names should be the same as column names or if you are filtering relation you can use `:` as separator between relation name and column name instead of `.` and the query string should follow this pattern
 
 ```php
 // ?<colname>=<operator, default:"=">|<value>
@@ -287,7 +288,7 @@ then you can create filter form like by following steps
 
 - give the form class filter
 - input name should be like column name
-- for relations you can use “:” as separator ex: `relation:columnName`
+- for relations you can use `:` as separator ex: `relation:columnName`
 - set the filtering operator in the `data-filter` attribute the default is `=`
 - use `filterValue("queryParam")` to get the filter value
 
