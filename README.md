@@ -125,7 +125,7 @@ in the example above the time column is stored in the database as datetime you m
 
 but for doing that you wrote the same searching query that the package provide so if you want to add new `orWhere` statement for the column search query you may use `#[SearchAdd(”colname”)]` attribute 
 
-[!NOTE]
+**Note**
 you may as many searchAdd methods as you want. 
 
 ```php
