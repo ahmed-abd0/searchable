@@ -82,7 +82,6 @@ class SearchColumn
 
     public function hasCustomSearchMethod(): bool
     {
-
         return (new AttributeHandler($this->model))
             ->findMethods(Search::class, [$this->name])
             ->isNotEmpty();
@@ -108,11 +107,11 @@ class SearchColumn
     {
         return function ($q, $searchWord) {
 
-            $this->callAddConditionCallables($q, $searchWord);
-
             (new AttributeHandler($this->model))
                 ->findMethod(Search::class, [$this->name])
                 ?->invoke($this->model, $q, $searchWord);
+
+            $this->callAddConditionCallables($q, $searchWord);
         };
     }
 
@@ -125,14 +124,12 @@ class SearchColumn
 
     protected function addConditionMethods(): Collection
     {
-        return (new AttributeHandler($this->model))
-            ->findMethods(SearchAdd::class, [$this->name]);
+        return (new AttributeHandler($this->model))->findMethods(SearchAdd::class, [$this->name]);
     }
 
     protected function searchable(): array
     {
-        return (new AttributeHandler($this->model))
-            ->findPropertyValue(SearchColumns::class) ?? [];
+        return (new AttributeHandler($this->model))->findPropertyValue(SearchColumns::class) ?? [];
     }
 
     private function strName(): Stringable

@@ -58,6 +58,7 @@ class ColumnConfigraution
 
         return match (strtoupper($this->operator())) {
 
+            "IS_NULL", "IS_NOT_NULL" => [$columnName],
             "BETWEENEQUAL", "BTE" => [$columnName, explode(",", $searchWord, 2), "="],
             "BETWEEN", "BT" => [$columnName, explode(",", $searchWord, 2)],
             "TO_EQ", "TO_TIME_EQ" => [$columnName, "<=", $searchWord],
@@ -79,6 +80,8 @@ class ColumnConfigraution
 
         return match (strtoupper($this->operator())) {
 
+            "IS_NOT_NULL" => "orWhereNotNull",
+            "IS_NULL" => "orWhereNull",
             "BETWEEN", "BT", "BETWEENEQUAL", "BTE" => "orBetweenMacro",
             "FROM_TIME", "TO_TIME", "FROM_TIME_EQ", "TO_TIME_EQ" => "orWhereTime",
             "FROM", "TO", "FROM_EQ", "TO_EQ" => "orWhereDate",
