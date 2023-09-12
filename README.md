@@ -125,7 +125,8 @@ in the example above the time column is stored in the database as datetime you m
 
 but for doing that you wrote the same searching query that the package provide so if you want to add new `orWhere` statement for the column search query you may use `#[SearchAdd(”colname”)]` attribute 
 
-**_NOTE:_**  you may as many searchAdd methods as you want. 
+[!NOTE]
+you may as many searchAdd methods as you want. 
 
 ```php
 #[SearchAdd("time")]
@@ -278,6 +279,11 @@ the operators allowed to be use in filtering is any operator you can send to  �
 | “between” or “bt” | filtering results that lies in given range | ?created_at=bt\|2010-01-01,2015-01-01&role_id=bt\|3,5 |
 | “betweenEqual” or “bte” | filtering results that lies in given range with boundry | ?created_at=bte\|2010-01-01,2015-01-01&role_id=bte\|3,5 |
 | “where” statement operators | any operator used in “where” method can be used as filter operator | ?age=<\|20&gender=male |
+
+[!NOTE] 
+between operators must have two arguments separted by comma if there is no `from` argument the it will filter data from minus infinty to the to `to` argument if there is no `to` argument it will filter to infinty
+example : ?created_at=bt|,2010-01-01 get all records created before 2010-01-01
+example : ?created_at=bt|2010-01-01, get all records created after 2010-01-01.
 
 ### Filter Blade Script
 
