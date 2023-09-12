@@ -402,3 +402,5 @@ you can register your custom operators also in one of the service providers boot
         return $builder->where($column, "like", $word);
     });
 ```
+after defining your custom operator you can use them like this
+`?name=sp_like|ahmed abdo`
