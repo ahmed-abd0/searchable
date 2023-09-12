@@ -281,7 +281,9 @@ the operators allowed to be use in filtering is any operator you can send to  â€
 
 **_NOTE:_** 
 between operators must have two arguments separted by comma if there is no `from` argument the it will filter data from minus infinty to the to `to` argument if there is no `to` argument it will filter to infinty
+
 example : ?created_at=bt|,2010-01-01 get all records created before 2010-01-01
+
 example : ?created_at=bt|2010-01-01, get all records created after 2010-01-01.
 
 
