@@ -30,6 +30,8 @@ Laravel  Searchable is package that adds easy customizable  searching and filter
 
   - [Filter Helpers](#filter-helpers)
 
+  - [Custom Operators](#custom-operators)
+
 ## Installation
 
 ```php
@@ -368,7 +370,7 @@ filterValue("role_id", true) //output [2,3,4]
 ### Custom Operators
 you may want to define a custom operator used for filtering and searching there is two ways to define custom operator
 
-**In Config**
+**In Config**  
 to publish config file run this command
 ```php
 
@@ -379,7 +381,7 @@ after publishing config file you can define your custom operators in the `operat
 
 ```php
 
-     "operators" => [
+    "operators" => [
 
         "sp_like" => function (Builder $builder, string $column, string $word) {
             return $builder->where($column, "like", $word);
@@ -390,7 +392,7 @@ after publishing config file you can define your custom operators in the `operat
 
 **In Service Provider**
 
-you can register your custom operators also in one of the service providers
+you can register your custom operators also in one of the service providers boot method
 
 ```php
     ColumnConfigraution::registerOperator("sp_like", function (Builder $builder, string $column, string $word) {
