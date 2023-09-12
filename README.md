@@ -124,6 +124,7 @@ public function searchTime(Builder $q, $searchWord) {
 in the example above the time column is stored in the database as datetime you may want to customize searching this column to add new `orWhere` statement for searching by day name 
 
 but for doing that you wrote the same searching query that the package provide so if you want to add new `orWhere` statement for the column search query you may use `#[SearchAdd(”colname”)]` attribute 
+
 **_NOTE:_**  you may as many searchAdd methods as you want. 
 
 ```php
