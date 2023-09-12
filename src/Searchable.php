@@ -42,7 +42,7 @@ trait Searchable
 
             [$operator, $filterWord] = $this->wordAndOperator($filterCondition);
 
-            if ($filterWord !== null && $filterWord !== "") {
+            if ($filterWord !== null) {
                 $q->search($filterWord, [$column => $this->filterConfig($operator)]);
             }
         });
@@ -67,8 +67,8 @@ trait Searchable
 
     public function filterColumns(): Collection
     {
-        return $this->filterAble()
-            ? collect($this->filterAble())
+        return $this->filterable()
+            ? collect($this->filterable())
             : $this->searchColumns()->merge($this->fillable ?? []);
     }
 
@@ -120,7 +120,7 @@ trait Searchable
             ->findPropertyValue(SearchColumns::class);
     }
 
-    private function filterAble(): ?array
+    private function filterable(): ?array
     {
         return (new AttributeHandler($this))
             ->findPropertyValue(FilterColumns::class);

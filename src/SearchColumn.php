@@ -15,14 +15,12 @@ use Stringable;
 
 class SearchColumn
 {
-
     public function __construct(
         private Model $model,
         private string $name,
         private ColumnConfigraution $configuration = new ColumnConfigraution()
     ) {
     }
-
 
     public function getColumnQuery(): callable
     {
@@ -57,7 +55,6 @@ class SearchColumn
             $q->where(function ($q) use ($column, $searchWord) {
 
                 $this->callAddConditionCallables($q, $searchWord);
-
                 $q->{$this->configuration->searchMethod()}(...$this->configuration->searchAgruments($column, $searchWord));
             });
         });
@@ -111,27 +108,25 @@ class SearchColumn
     {
         return function ($q, $searchWord) {
 
+            $this->callAddConditionCallables($q, $searchWord);
+
             (new AttributeHandler($this->model))
                 ->findMethod(Search::class, [$this->name])
                 ?->invoke($this->model, $q, $searchWord);
-
-            $this->callAddConditionCallables($q, $searchWord);
         };
     }
 
     protected function callAddConditionCallables(Builder $q, string $searchWord)
     {
         if ($this->configuration->usesAddCondition()) {
-            $this->addConditionMethods()->each->__invoke($q, $searchWord);
+            $this->addConditionMethods()->each->invoke($this->model, $q, $searchWord);
         }
     }
 
     protected function addConditionMethods(): Collection
     {
-    
         return (new AttributeHandler($this->model))
-            ->findMethods(SearchAdd::class, [$this->name])
-            ->map->getClosure($this->model);
+            ->findMethods(SearchAdd::class, [$this->name]);
     }
 
     protected function searchable(): array

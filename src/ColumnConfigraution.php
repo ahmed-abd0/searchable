@@ -2,10 +2,14 @@
 
 namespace Abdo\Searchable;
 
-use Abdo\Searchable\AttributeHandler\AttributeHandler;
+use Closure;
+use Exception;
+use Illuminate\Database\Eloquent\Builder;
 
 class ColumnConfigraution
 {
+
+    private static array $sepcialOperators = [];
 
     public function __construct(private array $config = [])
     {
@@ -18,7 +22,6 @@ class ColumnConfigraution
 
     public function usesCustom()
     {
-
         return $this->config["useCustom"] ?? true;
     }
 
@@ -32,14 +35,26 @@ class ColumnConfigraution
         return ["BETWEEN", "BT", "BETWEENEQUAL", "BTE"];
     }
 
-    
     public static function isBetweenOperator(string $operator)
     {
         return in_array(strtoupper($operator), static::betweenOperators());
     }
 
+    public static function registerOperator(string $operator, callable $callable)
+    {
+        if (!str_starts_with($operator, "sp_")) {
+            throw new Exception("custom operator '{$operator}' must start with 'sp_' ");
+        }
+
+        static::$sepcialOperators[strtolower($operator)] = $callable;
+    }
+
     public function searchAgruments(string $columnName, string $searchWord): array
     {
+
+        if ($this->operatorIsSepcial()) {
+            return [$this->sepcialOperatorArg($columnName, $searchWord)];
+        }
 
         return match (strtoupper($this->operator())) {
 
@@ -60,6 +75,8 @@ class ColumnConfigraution
     public function searchMethod(): string
     {
 
+        if ($this->operatorIsSepcial()) return "tap";
+
         return match (strtoupper($this->operator())) {
 
             "BETWEEN", "BT", "BETWEENEQUAL", "BTE" => "orBetweenMacro",
@@ -71,5 +88,13 @@ class ColumnConfigraution
         };
     }
 
-   
+    public function operatorIsSepcial(): bool
+    {
+        return isset(static::$sepcialOperators[strtolower($this->operator())]);
+    }
+
+    public function sepcialOperatorArg(string $columnName, string $searchWord): Closure
+    {
+        return fn (Builder $q) => static::$sepcialOperators[strtolower($this->operator())]($q, $columnName, $searchWord);
+    }
 }

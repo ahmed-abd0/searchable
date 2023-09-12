@@ -9,7 +9,12 @@ use Illuminate\Support\ServiceProvider as laravelServiceProvider;
 class ServiceProvider extends laravelServiceProvider
 {
 
-
+    public function register()
+    {
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/searchable.php', 'searchable'
+        );
+    }
 
     public function boot()
     {
@@ -22,6 +27,16 @@ class ServiceProvider extends laravelServiceProvider
             return "{!! view('searchable::script')->render() !!}";
         });
 
+        $this->publishes([
+            __DIR__.'/../config/searchable.php' => config_path('searchable.php'),
+        ], "config");
+
+        $this->registerBuilderMacros();
+        $this->registerSepcialOperatorsFromConfig();
+      
+    }
+
+    private function registerBuilderMacros(){
         Builder::macro('orBetweenMacro', function (string $column, array $range, string $equal = "") {
 
             [$from, $to] = getFromToFromRange($range);
@@ -31,8 +46,13 @@ class ServiceProvider extends laravelServiceProvider
                 [$from, $from, $to, $to]
             );
         });
-      
     }
 
+    private function registerSepcialOperatorsFromConfig() {
+
+        foreach(config("searchable.operators", []) as $operator => $callable) {
+            ColumnConfigraution::registerOperator($operator, $callable);
+        }
+    }
     
 }
