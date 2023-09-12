@@ -370,6 +370,9 @@ filterValue("role_id", true) //output [2,3,4]
 ### Custom Operators
 you may want to define a custom operator used for filtering and searching there is two ways to define custom operator
 
+**_NOTE:_**  
+custom operator must start with `sp_`  
+
 **In Config**  
 to publish config file run this command
 ```php
@@ -399,6 +402,3 @@ you can register your custom operators also in one of the service providers boot
         return $builder->where($column, "like", $word);
     });
 ```
-
-**_NOTE:_**  
-custom operator must start with `sp_`  
