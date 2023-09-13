@@ -5,6 +5,7 @@ namespace Abdo\Searchable;
 use Abdo\Searchable\AttributeHandler\AttributeHandler;
 use Abdo\Searchable\Attributes\FilterColumns;
 use Abdo\Searchable\Attributes\SearchColumns;
+use Abdo\Searchable\Enums\Mode;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
@@ -30,22 +31,19 @@ trait Searchable
     {
         $q->with($this->eagerLoadRelations())->where(function ($q) use ($columns, $searchWord) {
 
-            $this->searchColumns($columns)->each($this->searchBy($q, $searchWord));
+            $this->searchColumns($columns)->each($this->searchCallable($q, $searchWord));
         });
     }
 
-    public function scopeFilter(Builder $q, ?iterable $filters = null)
+    public function scopeFilter(Builder $q, ?iterable $filters = null, Mode $mode = Mode::AND)
     {
         $filters = is_null($filters) ? $this->detectFiltersFromQueryString() : $filters;
 
-        collect($filters)->filter()->each(function ($filterCondition, $column) use ($q) {
+        if ($mode === Mode::OR) {
+            return tap($q, fn() => collect($filters)->filter()->each($this->orFilterCallable($q)));
+        } 
 
-            [$operator, $filterWord] = $this->wordAndOperator($filterCondition);
-
-            if ($filterWord !== null) {
-                $q->search($filterWord, [$column => $this->filterConfig($operator)]);
-            }
-        });
+        collect($filters)->filter()->each($this->andFilterCallable($q));
     }
 
     public function detectFiltersFromQueryString()
@@ -77,16 +75,38 @@ trait Searchable
         return true;
     }
 
-    private function searchBy(Builder $q, string $searchWord): callable
+    private function searchCallable(Builder $q, string $searchWord): callable
     {
 
         return function ($value, $index) use ($q, $searchWord) {
 
             [$column, $config] = $this->coloumnAndConfig($value, $index);
 
-            $callable = (new SearchColumn($this, $column, new ColumnConfigraution($config)))->getColumnQuery();
+            $query = (new SearchColumn($this, $column, $config))->getColumnQuery();
 
-            $callable($q, $searchWord);
+            $query($q, $searchWord);
+        };
+    }
+
+    private function andFilterCallable(Builder $q)
+    {
+        return function ($filterCondition, $column) use ($q) {
+
+            [$operator, $word] = $this->wordAndOperator($filterCondition);
+
+            $q->search($word, [$column => $this->filterConfig($operator)]);
+        };
+    }
+
+    private function orFilterCallable(Builder $q)
+    {
+        return function ($filterCondition, $column) use ($q) {
+
+            [$operator, $word] = $this->wordAndOperator($filterCondition);
+
+            $query = (new SearchColumn($this, $column, $this->filterConfig($operator)))->getColumnQuery();
+
+            $query($q, $word);
         };
     }
 

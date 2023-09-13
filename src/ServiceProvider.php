@@ -37,6 +37,7 @@ class ServiceProvider extends laravelServiceProvider
     }
 
     private function registerBuilderMacros(){
+        
         Builder::macro('orBetweenMacro', function (string $column, array $range, string $equal = "") {
 
             [$from, $to] = getFromToFromRange($range);

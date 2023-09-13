@@ -26,6 +26,8 @@ Laravel  Searchable is package that adds easy customizable  searching and filter
   
   - [Operators](#operators)
 
+  - [Filter Modes](#filter-modes)
+
   - [Filter Blade Script](#filter-blade-script)
 
   - [Filter Helpers](#filter-helpers)
@@ -34,7 +36,7 @@ Laravel  Searchable is package that adds easy customizable  searching and filter
 
 ## Installation
 
-```php
+```bash
 composer require ahmedabdo/searchable
 ```
 ## Searching
@@ -288,6 +290,19 @@ between operators must have two arguments separted by comma if there is no `from
 example : `?created_at=bt|,2010-01-01` get all records created before 2010-01-01  
 example : `?created_at=bt|2010-01-01,` get all records created after 2010-01-01  
 
+### Filter Modes
+
+there is two filter modes `and` mode and `or` mode the default mode is `and`  
+for changing the mode
+```php
+    // using or mode
+    User::filter(mode: Mode::OR)->get();
+
+    // using and mode
+    User::filter(mode: Mode::AND)->get();
+    User::filter()->get();
+```
+
 
 ### Filter Blade Script
 
@@ -375,7 +390,7 @@ custom operator must start with `sp_`
 
 **In Config**  
 to publish config file run this command
-```php
+```bash
 
 php artisan vendor:publish --provider="Abdo\Searchable\ServiceProvider"
 

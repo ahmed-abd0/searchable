@@ -3,8 +3,8 @@
 namespace Abdo\Searchable;
 
 use Closure;
-use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use InvalidArgumentException;
 
 class ColumnConfigraution
 {
@@ -43,7 +43,7 @@ class ColumnConfigraution
     public static function registerOperator(string $operator, callable $callable)
     {
         if (!str_starts_with($operator, "sp_")) {
-            throw new Exception("custom operator '{$operator}' must start with 'sp_' ");
+            throw new InvalidArgumentException("custom operator '{$operator}' must start with 'sp_' ");
         }
 
         static::$sepcialOperators[strtolower($operator)] = $callable;
@@ -98,6 +98,10 @@ class ColumnConfigraution
 
     public function sepcialOperatorArg(string $columnName, string $searchWord): Closure
     {
-        return fn (Builder $q) => static::$sepcialOperators[strtolower($this->operator())]($q, $columnName, $searchWord);
+        return function (Builder $q) use($columnName, $searchWord) {
+            $q->orWhere(
+                fn (Builder $q) => static::$sepcialOperators[strtolower($this->operator())]($q, $columnName, $searchWord)
+            );
+        };
     }
 }

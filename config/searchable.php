@@ -12,13 +12,14 @@ return [
      * 
      * note: operator name must start with sp_
      * 
-    */
+     */
 
     "operators" => [
 
         // "sp_operator" => function (Builder $builder, string $column, string $word) {
-                
+
         // },
+
     ],
 
 ];

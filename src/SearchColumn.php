@@ -15,11 +15,14 @@ use Stringable;
 
 class SearchColumn
 {
+    private ColumnConfigraution $configuration;
+
     public function __construct(
         private Model $model,
         private string $name,
-        private ColumnConfigraution $configuration = new ColumnConfigraution()
+        array $configuration = [] 
     ) {
+        $this->configuration = new ColumnConfigraution($configuration);
     }
 
     public function getColumnQuery(): callable
@@ -82,6 +85,7 @@ class SearchColumn
 
     public function hasCustomSearchMethod(): bool
     {
+
         return (new AttributeHandler($this->model))
             ->findMethods(Search::class, [$this->name])
             ->isNotEmpty();
@@ -89,7 +93,6 @@ class SearchColumn
 
     protected function relationSearchCustomMethod(): Closure
     {
-
         return function ($q, $searchWord) {
 
             [$relation] = $this->getRelationAndColumn();
@@ -124,12 +127,14 @@ class SearchColumn
 
     protected function addConditionMethods(): Collection
     {
-        return (new AttributeHandler($this->model))->findMethods(SearchAdd::class, [$this->name]);
+        return (new AttributeHandler($this->model))
+            ->findMethods(SearchAdd::class, [$this->name]);
     }
 
     protected function searchable(): array
     {
-        return (new AttributeHandler($this->model))->findPropertyValue(SearchColumns::class) ?? [];
+        return (new AttributeHandler($this->model))
+            ->findPropertyValue(SearchColumns::class) ?? [];
     }
 
     private function strName(): Stringable
