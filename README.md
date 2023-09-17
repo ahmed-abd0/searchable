@@ -70,7 +70,7 @@ class User extends Authenticatable
     ];
 
     #[SearchAdd("created_at")]
-    public function searchByCreatedAtDayName(Builder $q, $searchWord) {
+    public function searchByCreatedAtDayName(Builder $q, string $searchWord) {
         $q->orWhereRaw("DAYNAME(created_at) like ?", ["%" . $searchWord . "%"]);
     }
 }
@@ -119,7 +119,7 @@ public $searchable = [
 ];
 
 #[Search("time")]
-public function searchTime(Builder $q, $searchWord) {
+public function searchTime(Builder $q, string $searchWord) {
      $q->orWhere("time", "like", "%" . $searchWord . "%")
        ->orWhereRaw("DAYNAME(time) like ?", ["%" . $searchWord . "%"]);
 }
@@ -134,7 +134,7 @@ you may use as many searchAdd methods as you want.
 
 ```php
 #[SearchAdd("time")]
-public function searchTimeByDayName(Builder $q, $searchWord) {
+public function searchTimeByDayName(Builder $q, string $searchWord) {
      $q->orWhereRaw("DAYNAME(time) like ?", ["%" . $searchWord . "%"]);
 }
 ```
@@ -148,8 +148,8 @@ public $searchable = [
     ]
 ];
 
-#[Search(”patient.name”)]// or #[SearchAdd(”patient.name”)]
-public function searchPatientName(Builder $q, $searchWord) {
+#[Search("patient.name")]// or #[SearchAdd(”patient.name”)]
+public function searchPatientName(Builder $q, string $searchWord) {
      // $q is builder instance for Patient model 
      $q->orWhere("name", "like", "%" . $searchWord . "%");
 }
@@ -287,7 +287,7 @@ the operators allowed to be use in filtering is any operator you can send to  �
 | “where” statement operators | any operator used in “where” method can be used as filter operator | ?age=<\|20&gender=male |
 
 >[!NOTE]  
->between operators must have two arguments separted by comma if there is no `from` argument the it will filter data from minus infinty to the to `to` argument if there is no `to` argument it will filter to infinty  
+>between operators must have two arguments separted by comma if there is no `from` argument it will filter data from minus infinty to the to `to` argument if there is no `to` argument it will filter to infinty  
 >example : `?created_at=bt|,2010-01-01` get all records created before 2010-01-01  
 >example : `?created_at=bt|2010-01-01,` get all records created after 2010-01-01  
 
