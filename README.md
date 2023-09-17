@@ -148,7 +148,7 @@ public $searchable = [
     ]
 ];
 
-#[Search("patient.name")]// or #[SearchAdd(”patient.name”)]
+#[Search("patient.name")]// or #[SearchAdd("patient.name")]
 public function searchPatientName(Builder $q, string $searchWord) {
      // $q is builder instance for Patient model 
      $q->orWhere("name", "like", "%" . $searchWord . "%");
