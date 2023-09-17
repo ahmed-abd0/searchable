@@ -401,8 +401,8 @@ after publishing config file you can define your custom operators in the `operat
 
     "operators" => [
 
-        "sp_like" => function (Builder $builder, string $column, string $word) {
-            return $builder->where($column, "like", $word);
+        "sp_is_null" => function (Builder $builder, string $column, string $word) {
+            return $builder->whereIsNull($column)->orWhere($column, 0);
         },
     ],
 
@@ -413,11 +413,11 @@ after publishing config file you can define your custom operators in the `operat
 you can register your custom operators also in one of the service providers boot method
 
 ```php
-    ColumnConfigraution::registerOperator("sp_like", function (Builder $builder, string $column, string $word) {
-        return $builder->where($column, "like", $word);
+    ColumnConfigraution::registerOperator("sp_is_null", function (Builder $builder, string $column, string $word) {
+        return $builder->whereIsNull($column)->orWhere($column, 0);
     });
 
     //after defining your custom operator you can use them like this
-    //?name=sp_like|ahmed abdo
+    //?name=sp_is_null|
 ```
 
