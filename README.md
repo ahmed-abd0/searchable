@@ -418,6 +418,6 @@ you can register your custom operators also in one of the service providers boot
     });
 
     //after defining your custom operator you can use them like this
-    //?name=sp_is_null|
+    //?status=sp_is_null|
 ```
 
