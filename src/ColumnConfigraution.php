@@ -46,7 +46,7 @@ class ColumnConfigraution
             throw new InvalidArgumentException("custom operator '{$operator}' must start with 'sp_' ");
         }
 
-        static::$sepcialOperators[strtolower($operator)] = $callable;
+        static::$sepcialOperators[strtoupper($operator)] = $callable;
     }
 
     public function searchAgruments(string $columnName, string $searchWord): array
@@ -56,7 +56,7 @@ class ColumnConfigraution
             return [$this->sepcialOperatorArg($columnName, $searchWord)];
         }
 
-        return match (strtoupper($this->operator())) {
+        return match ($this->upperCaseOperator()) {
 
             "IS_NULL", "IS_NOT_NULL" => [$columnName],
             "BETWEENEQUAL", "BTE" => [$columnName, explode(",", $searchWord, 2), "="],
@@ -78,7 +78,7 @@ class ColumnConfigraution
 
         if ($this->operatorIsSepcial()) return "tap";
 
-        return match (strtoupper($this->operator())) {
+        return match ($this->upperCaseOperator()) {
 
             "IS_NOT_NULL" => "orWhereNotNull",
             "IS_NULL" => "orWhereNull",
@@ -93,15 +93,19 @@ class ColumnConfigraution
 
     public function operatorIsSepcial(): bool
     {
-        return isset(static::$sepcialOperators[strtolower($this->operator())]);
+        return isset(static::$sepcialOperators[$this->upperCaseOperator()]);
     }
 
     public function sepcialOperatorArg(string $columnName, string $searchWord): Closure
     {
         return function (Builder $q) use($columnName, $searchWord) {
-            $q->orWhere(
-                fn (Builder $q) => static::$sepcialOperators[strtolower($this->operator())]($q, $columnName, $searchWord)
+            return $q->orWhere(
+                fn (Builder $q) => static::$sepcialOperators[$this->upperCaseOperator()]($q, $columnName, $searchWord)
             );
         };
+    }
+
+    public function upperCaseOperator() {
+        return strtoupper($this->operator());
     }
 }
