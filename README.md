@@ -385,8 +385,8 @@ filterValue("role_id", true) //output [2,3,4]
 ### Custom Operators
 you may want to define a custom operator used for filtering and searching there is two ways to define custom operator
 
-**_NOTE:_**  
-custom operator must start with `sp_`  
+>[!NOTE]
+>custom operator must start with `sp_`
 
 **In Config**  
 to publish config file run this command
