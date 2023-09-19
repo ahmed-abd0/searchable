@@ -1,6 +1,15 @@
 {
     "name": "ahmedabdo/searchable",
     "description": "package for adding search functionality to laravel models",
+    "keywords": [
+        "searchable",
+        "search",
+        "filtering",
+        "filter",
+        "laravel",
+        "models",
+        "eloquent"
+    ],
     "type": "library",
     "license": "MIT",
     "autoload": {
