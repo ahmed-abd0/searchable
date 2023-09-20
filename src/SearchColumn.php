@@ -20,7 +20,7 @@ class SearchColumn
     public function __construct(
         private Model $model,
         private string $name,
-        array $configuration = [] 
+        array $configuration = []
     ) {
         $this->configuration = new ColumnConfigraution($configuration);
     }
@@ -110,9 +110,12 @@ class SearchColumn
     {
         return function ($q, $searchWord) {
 
-            (new AttributeHandler($this->model))
-                ->findMethod(Search::class, [$this->name])
-                ?->invoke($this->model, $q, $searchWord);
+            $q->orWhere(function ($q) use ($searchWord) {
+
+                (new AttributeHandler($this->model))
+                    ->findMethod(Search::class, [$this->name])
+                    ?->invoke($this->model, $q, $searchWord);
+            });
 
             $this->callAddConditionCallables($q, $searchWord);
         };
@@ -121,7 +124,10 @@ class SearchColumn
     protected function callAddConditionCallables(Builder $q, string $searchWord)
     {
         if ($this->configuration->usesAddCondition()) {
-            $this->addConditionMethods()->each->invoke($this->model, $q, $searchWord);
+
+            $q->orWhere(function ($q) use ($searchWord) {
+                $this->addConditionMethods()->each->invoke($this->model, $q, $searchWord);
+            });
         }
     }
 
