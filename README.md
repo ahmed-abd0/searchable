@@ -43,9 +43,9 @@ composer require ahmedabdo/searchable
 
 ## Search Usage Example
 
-- first use Abdo\Searchable\Searchable trait in your model
-- then define the columns you want to use for searching in searchable array like below
-- then use the search scope for searching the selected columns
+- Use the Abdo\Searchable\Searchable trait in your model.
+- Define the columns you want to use for searching within the searchable array.
+- Utilize the search scope to perform searches on the selected columns.
 
 ```php
 // model
@@ -82,13 +82,9 @@ User::search($searchWord)->get();
 
 ### Search Columns
 
-you can define your search columns in property that has `#[SearchColumns]` attribute
-
-it will contain the default columns for searching the model and relations that needs
-
-to be eager loaded
-
-if its not set the fillable columns will be used instead
+To define the search columns for a model, you can utilize a property decorated with the `#[SearchColumns]` attribute. 
+This property will contain the default columns for searching the model, as well as any relations that need to be eagerly loaded.
+In case the `#[SearchColumns]` attribute is not set, the fillable columns will be used as a fallback.
 
 ```php
 #[SearchColumns]
@@ -106,9 +102,7 @@ public $searchable = [
 
 ### Custom Search
 
-if you want to customize searching query for one of the columns you can add method with 
-
-`#[Search(”colname”)]` attribute and write your custom query for the selected column
+If you wish to customize the search query for a specific column, you can create a method with the `#[Search("colname")]` attribute and craft a custom query specifically for that chosen column.
 
 ```php
 #[SearchColumns]
@@ -125,9 +119,10 @@ public function searchTime(Builder $q, string $searchWord) {
 }
 ```
 
-in the example above the time column is stored in the database as datetime you may want to customize searching this column to add new `orWhere` statement for searching by day name 
+In the example above, the "time" column is stored in the database as a datetime value. If you wish to customize the search functionality for this column by adding a new orWhere statement for searching by day name, you can employ the `#[SearchAdd("colname")]` attribute.
 
-but for doing that you wrote the same searching query that the package provide so if you want to add new `orWhere` statement for the column search query you may use `#[SearchAdd(”colname”)]` attribute
+By utilizing this attribute, you can incorporate the desired orWhere statement into the column search query, while still leveraging the existing search query provided by the package.
+
 
 >[!NOTE]  
 you may use as many searchAdd methods as you want. 
@@ -139,7 +134,7 @@ public function searchTimeByDayName(Builder $q, string $searchWord) {
 }
 ```
 
-if you used on of `#[Search(”colname”)]` or `#[SearchAdd(”colname”)]` for customizing relation search the builder instance passed to the custom method will be builder for the relation model
+If you have used either `#[Search("colname")]` or `#[SearchAdd("colname")]` to customize relation search, the builder instance passed to the custom method will be the builder for the relation model.
 
 ```php
 public $searchable = [
@@ -157,7 +152,7 @@ public function searchPatientName(Builder $q, string $searchWord) {
 
 ### Overwrite Default Columns
 
-if you want to overwrite the columns defined in the model you may pass columns as second parameter for the search scope
+If you want to override the columns defined in the model, you can pass the columns as a second parameter to the search scope.
 
 ```php
 User::search($searchWord, ["fname", "lname"])->get();
@@ -165,7 +160,7 @@ User::search($searchWord, ["fname", "lname"])->get();
 
 ### Search Options
 
-you can add options array for columns 
+You can add an options array for columns
 
 ```php
 #[SearchColumns]
@@ -180,7 +175,7 @@ User::search($searchWord,[
 ])
 ```
 
-the column can have three options
+The column can have three options
 
 | option |                          description |                          values |      default |
 | --- | --- | --- | --- |
@@ -223,13 +218,8 @@ User::filter()->get();
 
 ### Filtering Columns
 
-the default value for filtering columns will be the columns defined in property that has 
+By default, the columns used for filtering will be those defined in the property with the `#[SearchColumns]` attribute, combined with the columns specified in the fillable array. If you wish to use different columns as the default for filtering, you can define a property with the `#[FilterColumns]` attribute.
 
-`#[SearchColumns]` attribute merged with column defined in the fillable array if you want to 
-
-use different columns as default for filtering you can define property with `#[FilterColumns]`
-
-attribute
 
 ```php
 #[FilterColumns]
@@ -240,7 +230,7 @@ public $filterable = [
 
 ### Filter Query String
 
-the query string parameters names should be the same as column names or if you are filtering relation you can use `:` as separator between relation name and column name instead of `.` and the query string should follow this pattern
+The query string parameter names should match to the column names. If you are filtering a relation, you can use a colon `:` as a separator between the relation name and the column name, instead of a dot `.` The query string should follow to this pattern.
 
 ```php
 // ?<colname>=<operator, default:"=">|<value>
@@ -248,22 +238,22 @@ the query string parameters names should be the same as column names or if you a
 User::filter()->get();
 ```
 
-if you used parameter name different from column name you can pass the column and the filter value to the filter scope
+If you have used a parameter name that differs from the column name, you can pass both the column name and the filter value to the filter scope.
 
 ```php
 // ?<not-colname>=<operator, default:"=">|<value>
-// filterParam is helper to get the filter value from query string
-// in this example you can use request("not-colname") to get the value 
+// To retrieve the filter value from the query string, you can utilize the "filterParam" helper
+
 User::filter(["column_name" => filterParam("not_column_name")])->get();
 
-// note: if the rest of the query string params names
-// are the same as colnames you can do something like this 
+// Note that if the rest of the query string parameter names match the column names
+// you can employ a similar approach.
 User::filter(["column_name" => filterParam("not_column_name")])->filter()->get(); 
 ```
 
 ### Operators
 
-the operators allowed to be use in filtering is any operator you can send to  “where” builder method plus 
+The operators allowed for filtering include any operator that can be sent to the `where` builder method, plus additional operators.
 
 |             Operator |                                     Description | Example |
 | --- | --- | --- |
@@ -287,9 +277,9 @@ the operators allowed to be use in filtering is any operator you can send to  �
 | “where” statement operators | any operator used in “where” method can be used as filter operator | ?age=<\|20&gender=male |
 
 >[!NOTE]  
->between operators must have two arguments separted by comma if there is no `from` argument it will filter data from minus infinty to the to `to` argument if there is no `to` argument it will filter to infinty  
->example : `?created_at=bt|,2010-01-01` get all records created before 2010-01-01  
->example : `?created_at=bt|2010-01-01,` get all records created after 2010-01-01  
+>When using the "between" operator, two arguments must be provided, separated by a comma. If the `from` argument is not specified, the data will be filtered from negative infinity up to the `to` argument. Similarly, if the `to` argument is not provided, the data will be filtered up to positive infinity.
+>For example: ?created_at=bt|,2010-01-01 retrieves all records created before January 1, 2010.
+>Another example: ?created_at=bt|2010-01-01, retrieves all records created after January 1, 2010.  
 
 ### Filter Modes
 
@@ -307,16 +297,16 @@ for changing the mode
 
 ### Filter Blade Script
 
-if you are using regular blade for front end there is a simple js script that makes it easier to create filter forms you need to include `“@searcableScripts”`  directive in your main layout 
+If you are utilizing regular Blade templates for the frontend, there is a simple JavaScript script available that simplifies the creation of filter forms. To include this script, add the `@searchableScripts` directive to your main layout.
 
 then you can create filter form like by following steps
 
 ### Usage:
 
-- give the form class `filter`
-- input name should be like column name
-- for relations you can use `:` as separator ex: `relation:columnName`
-- set the filtering operator in the `data-filter` attribute the default is `=`
+- ensure that the form has class `filter`
+- The input name should match the corresponding column name
+- For relations, use a colon `:` as a separator ex: `relation:columnName`
+- Set the desired filtering operator in the `data-filter` attribute, with the default being `=`
 - use `filterValue("queryParam")` to get the filter value
 
 ```html
@@ -351,7 +341,7 @@ then you can create filter form like by following steps
 
 **filterParam**
 
-the filterParam helper function is used to get the filter value from the query string this helper function must be used if you are using blade filter form and the input field name was different from the column name 
+The "filterParam" helper function is utilized to extract the filter value from the query string. This helper function should be utilized when employing a blade filter form, especially if the input field name differs from the corresponding column name.
 
 ```php
 //model
@@ -373,7 +363,7 @@ User::filter(["name" => filterParam("empName")])->get();
 
 **filterValue**
 
-filterValue helper is used to get the value used for filtering to show this value in the input field for example 
+The "filterValue" helper is employed to retrieve the value utilized for filtering in order to display this value in the input field, as an illustrative example.
 
 ```php
 //?name=cont|ahmed&role_id=in|2,3,4
@@ -384,19 +374,20 @@ filterValue("role_id", true) //output [2,3,4]
 ```
 
 ### Custom Operators
-you may want to define a custom operator used for filtering and searching there is two ways to define custom operator
+In case you need to define a custom operator for filtering and searching, there are two distinct approaches available.
 
 >[!NOTE]
 >custom operator must start with `sp_`
 
 **In Config**  
-to publish config file run this command
+To publish the configuration file, execute the following command
+
 ```bash
 
 php artisan vendor:publish --provider="Abdo\Searchable\ServiceProvider"
 
 ```
-after publishing config file you can define your custom operators in the `operators` array
+Once the configuration file has been published, you have the option to define your custom operators within the `operators` array.
 
 ```php
 
@@ -411,7 +402,7 @@ after publishing config file you can define your custom operators in the `operat
 
 **In Service Provider**
 
-you can register your custom operators also in one of the service providers boot method
+Additionally, you can register your custom operators within the boot method of one of the service providers.
 
 ```php
     ColumnConfigraution::registerOperator("sp_is_null", function (Builder $builder, string $column, string $word) {
