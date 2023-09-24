@@ -12,7 +12,8 @@ class ServiceProvider extends laravelServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(
-            __DIR__.'/../config/searchable.php', 'searchable'
+            __DIR__ . '/../config/searchable.php',
+            'searchable'
         );
     }
 
@@ -28,32 +29,33 @@ class ServiceProvider extends laravelServiceProvider
         });
 
         $this->publishes([
-            __DIR__.'/../config/searchable.php' => config_path('searchable.php'),
+            __DIR__ . '/../config/searchable.php' => config_path('searchable.php'),
         ], "config");
 
         $this->registerBuilderMacros();
         $this->registerSepcialOperatorsFromConfig();
-      
     }
 
-    private function registerBuilderMacros(){
-        
+    private function registerBuilderMacros()
+    {
+
         Builder::macro('orBetweenMacro', function (string $column, array $range, string $equal = "") {
 
             [$from, $to] = getFromToFromRange($range);
 
-            return $this->orWhereRaw(
-                "($column >{$equal} ? OR ? IS NULL) AND ($column <{$equal} ? OR ? IS NULL)",
-                [$from, $from, $to, $to]
-            );
+            return $this->orWhere(function (Builder $q) use ($column, $equal, $from, $to) {
+
+                $q->when($from, fn ($q) =>  $q->where($column, ">{$equal}", $from))
+                    ->when($to, fn ($q) =>  $q->where($column, "<{$equal}", $to));
+            });
         });
     }
 
-    private function registerSepcialOperatorsFromConfig() {
+    private function registerSepcialOperatorsFromConfig()
+    {
 
-        foreach(config("searchable.operators", []) as $operator => $callable) {
+        foreach (config("searchable.operators", []) as $operator => $callable) {
             ColumnConfigraution::registerOperator($operator, $callable);
         }
     }
-    
 }
