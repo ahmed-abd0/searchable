@@ -41,12 +41,12 @@ class ServiceProvider extends laravelServiceProvider
 
         Builder::macro('orBetweenMacro', function (string $column, array $range, string $equal = "") {
 
-            [$from, $to] = getFromToFromRange($range);
-
+            [$from, $to] = $range;
+                
             return $this->orWhere(function (Builder $q) use ($column, $equal, $from, $to) {
 
-                $q->when($from, fn ($q) =>  $q->where($column, ">{$equal}", $from))
-                    ->when($to, fn ($q) =>  $q->where($column, "<{$equal}", $to));
+                $q->when((string) $from !== '', fn ($q) =>  $q->where($column, ">{$equal}", $from))
+                    ->when((string) $to !== '', fn ($q) =>  $q->where($column, "<{$equal}", $to));
             });
         });
     }
