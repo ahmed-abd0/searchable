@@ -53,7 +53,6 @@ class ServiceProvider extends laravelServiceProvider
 
     private function registerSepcialOperatorsFromConfig()
     {
-
         foreach (config("searchable.operators", []) as $operator => $callable) {
             ColumnConfigraution::registerOperator($operator, $callable);
         }

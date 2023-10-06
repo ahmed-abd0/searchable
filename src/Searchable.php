@@ -12,21 +12,6 @@ use Illuminate\Support\Collection;
 trait Searchable
 {
 
-    protected static function booted(): void
-    {
-        if (static::isUsingAutomaticSearch()) {
-
-            static::addGlobalScope('search', function (Builder $builder) {
-
-                $modelSearch = lcfirst(class_basename(static::class)) . "Search";
-
-                if (request()->has($modelSearch) && request()->get($modelSearch)) {
-                    $builder->search(request()->get($modelSearch));
-                }
-            });
-        }
-    }
-
     public function scopeSearch(Builder $q, $searchWord, ?iterable $columns = null)
     {
         $q->with($this->eagerLoadRelations())->where(function ($q) use ($columns, $searchWord) {
@@ -40,8 +25,8 @@ trait Searchable
         $filters = is_null($filters) ? $this->detectFiltersFromQueryString() : $filters;
 
         if ($mode === Mode::OR) {
-            return tap($q, fn() => collect($filters)->filter()->each($this->orFilterCallable($q)));
-        } 
+            return tap($q, fn () => collect($filters)->filter()->each($this->orFilterCallable($q)));
+        }
 
         collect($filters)->filter()->each($this->andFilterCallable($q));
     }
@@ -68,11 +53,6 @@ trait Searchable
         return $this->filterable()
             ? collect($this->filterable())
             : $this->searchColumns()->merge($this->fillable ?? []);
-    }
-
-    public static function isUsingAutomaticSearch(): bool
-    {
-        return true;
     }
 
     private function searchCallable(Builder $q, string $searchWord): callable
